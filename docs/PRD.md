@@ -10,13 +10,13 @@ Une app de comptabilité sur mesure qui remplace graduellement Zoho Books, bâti
 
 ## Utilisateur cible
 
-Deux personnes accèdent à l'app. **L'opérateur** (le porteur du projet) réalise la tenue de livres, la révision hebdomadaire des dépenses, la saisie de l'AR et les clôtures ; il maîtrise la compta générale mais n'a pas d'expérience des logiciels comptables professionnels. Un **contact interne MT Conseil** (associé/gestionnaire) consulte l'état financier et valide. Les deux rôles sont distincts au niveau des permissions dès le départ.
+Deux personnes accèdent à l'app. **L'opérateur** (le porteur du projet) réalise la tenue de livres, la révision hebdomadaire des dépenses, la saisie de l'AR et les clôtures ; il maîtrise la compta générale mais n'a pas d'expérience des logiciels comptables professionnels. Un **contact interne MT Conseil** (associé/gestionnaire) consulte l'état financier et peut intervenir directement sur les données si besoin. Les deux rôles ont la même capacité d'édition ; aucune restriction générale entre eux. Toute distinction future se limite à des actions spécifiques (ex: clôture d'année fiscale).
 
 ## User Stories
 
 **Authentification & rôles**
 - **US-1** — En tant qu'utilisateur, je veux me connecter par courriel + mot de passe et réinitialiser un mot de passe oublié, afin d'accéder à l'app de façon sécurisée.
-- **US-2** — En tant qu'opérateur, je veux un accès complet (saisie, écritures, clôtures) tandis que le contact MT Conseil a un accès de consultation/validation, afin que chacun voie ce qui le concerne.
+- **US-2** — En tant qu'utilisateur (opérateur ou contact MT Conseil), je veux pouvoir consulter et modifier n'importe quelle donnée financière si besoin, afin que les deux rôles puissent intervenir sans dépendre l'un de l'autre pour une simple correction.
 
 **Comptes fournisseurs (AP)**
 - **US-3** — En tant qu'opérateur, je veux saisir manuellement une facture fournisseur, afin d'enregistrer une dépense sans dépendre d'une automatisation.
@@ -75,7 +75,7 @@ Deux personnes accèdent à l'app. **L'opérateur** (le porteur du projet) réal
 
 - **Partie double inviolable** : impossible d'enregistrer une écriture dont débits ≠ crédits ; la contrainte est garantie au niveau des données, pas seulement dans l'interface.
 - **Passé immuable** : une fois une période clôturée, ses transactions passent en lecture seule ; toute correction se fait par écriture d'ajustement dans la période courante.
-- **Deux voies d'ingestion des dépenses** : saisie manuelle par l'opérateur, ou réception via n8n (l'app expose un point d'intégration par clé API et/ou requête HTTP). La zone tampon Google Sheet reste côté n8n.
+- **Deux voies d'ingestion des dépenses** : saisie manuelle par l'opérateur, ou lecture automatisée du Google Sheet alimenté par n8n (l'app tire les données, pas de point d'intégration exposé côté app). La zone tampon Google Sheet reste côté n8n.
 - **Mécanisme de catégorisation modulaire** : le mapping dépense → poste comptable (règles, LLM, ou manuel) est conçu de façon interchangeable ; l'opérateur voit une suggestion qu'il peut corriger. Mécanisme précis à concevoir.
 - **Deux rituels hebdomadaires distincts** : tenue de livres (saisie/écritures) et révision (contrôle qualité) sont deux parcours séparés. Les corrections se font dans l'app, jamais dans le Sheet.
 - **Balance âgée** par tranches 0-30 / 30-60 / 60-90+ jours, groupée par client.
@@ -83,7 +83,7 @@ Deux personnes accèdent à l'app. **L'opérateur** (le porteur du projet) réal
 - **Année fiscale configurable** dans les paramètres ; date de début exacte à confirmer avec MT Conseil.
 - **Plan comptable générique au démarrage** (5 catégories : actifs, passifs, capitaux propres, revenus, dépenses), ajustable en cours de route ; structure fine à préciser.
 - **Format d'export** : PDF + CSV/Excel ; format exact à déterminer avec le comptable externe.
-- **Deux rôles** : opérateur (accès complet) et contact MT Conseil (consultation/validation), séparés par les permissions.
+- **Deux rôles nominaux** : opérateur et contact MT Conseil, avec la même capacité d'édition — pas de séparation de permissions générale. Toute distinction future se limiterait à des actions spécifiques (ex: clôture), pas à l'accès aux données.
 
 ## Notes complémentaires
 
@@ -91,4 +91,3 @@ Deux personnes accèdent à l'app. **L'opérateur** (le porteur du projet) réal
 - **Dépendance externe n8n** : le flux OCR (Mistral), la zone tampon Google Sheet, le déclencheur de réception et la logique anti-doublon vivent côté n8n ; l'app en dépend mais ne les construit pas.
 - **Points ouverts à trancher plus tard** : date de début d'année fiscale, structure fine du plan comptable de MT Conseil, format exact de l'export comptable, mécanisme précis de catégorisation.
 - **Découpage en phases** : le présent document décrit le *quoi* ; le découpage en phases de développement sera fait séparément une fois ce cadrage validé.
-- **Hypothèse à valider** : rôle de consultation/validation du contact MT Conseil supposé en lecture seule — à confirmer si une capacité de validation active (approbation d'écritures) est souhaitée.

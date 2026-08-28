@@ -13,24 +13,29 @@ verticales (tracer bullets)** : chaque phase traverse toutes les couches
 **Contrainte d'ingestion (n8n + Google Sheets)** : la communication des factures passe
 par un Google Sheet. n8n écrit dans le Sheet ; **c'est l'app qui tire les données** via
 l'API Google Sheets, soit sur une base **programmée** (toutes les X min), soit
-**déclenchée manuellement** par l'opérateur (bouton « synchroniser maintenant »).
+**déclenchée manuellement** par l'utilisateur (bouton « synchroniser maintenant »).
 L'app _pull_, elle ne reçoit pas de webhook. La zone tampon Sheet et l'anti-doublon
 restent côté n8n.
 
-**Décisions produit confirmées** : pas de workflow d'approbation/rejet ; les deux rôles
-peuvent modifier n'importe quelle écriture (aucune restriction d'édition entre rôles) —
-la piste d'audit assure la traçabilité. Catégorisation simple pour le MVP (règles
-éditables sans redéploiement). Projet greenfield.
+**Décisions produit confirmées** : pas de workflow d'approbation/rejet ; deux niveaux de
+permission choisis à l'invitation — `lecteur` (lecture seule) et `editeur` (lecture +
+création/modification) — la piste d'audit assure la traçabilité des écritures.
+Catégorisation simple pour le MVP (règles éditables sans redéploiement). Projet greenfield.
 
 ## Décisions architecturales
 
 Décisions durables qui s'appliquent à toutes les phases :
 
 - **Stack** : Next.js (App Router) + Supabase — Postgres, Auth, Storage, Edge Functions, pg_cron.
-- **Auth & rôles** : Supabase Auth email/mot de passe + reset. Deux rôles nominaux
-  (`operateur`, `contact_mt`) avec **capacité d'édition identique**, sans workflow
-  d'approbation. Toute distinction éventuelle se limite à des **actions spécifiques**
-  (ex. clôture d'année), à trancher plus tard ; portée par RLS si/quand nécessaire.
+- **Auth & permissions** : Supabase Auth email/mot de passe + reset. Invitation par
+  courriel illimitée (pas de signup public), émise depuis le **dashboard Supabase** ;
+  le niveau est passé en **metadata** et lu par le trigger `handle_new_user`. Enum
+  `profiles.permission_level` = `{lecteur, editeur}` (défaut `lecteur` si metadata
+  absente) : `lecteur` (lecture seule sur toutes les données financières), `editeur`
+  (en plus, création/modification). Pas de niveau `admin` applicatif — « admin » = humain
+  via le dashboard ; un vrai rôle admin (invitation in-app) pourra être ajouté plus tard.
+  La distinction lecture/écriture est **portée par RLS** ; l'application des droits en
+  écriture se matérialise quand les tables financières existent (Phase 2+).
 - **Cœur grand livre** :
   - `accounts` — plan comptable (5 classes : actif, passif, capitaux propres, revenus, dépenses)
   - `journal_entries` — en-tête d'écriture (date, période, description, source, auteur, version)
@@ -69,15 +74,17 @@ Décisions durables qui s'appliquent à toutes les phases :
 ### Ce qu'on livre
 
 Login par courriel + mot de passe avec réinitialisation, shell d'app protégé avec
-navigation, dashboard vide. Deux rôles nominaux (`operateur`, `contact_mt`) avec la
-même capacité d'édition — aucune restriction entre rôles ; une distinction future se
-limite à des actions spécifiques (ex. clôture). Pose les fondations Next.js + Supabase Auth.
+navigation, dashboard vide. Système d'invitation par courriel illimité (pas de signup
+public) ; deux niveaux de permission choisis à l'invitation (lecteur, editeur) ; table
+`profiles` + trigger `handle_new_user` assignant le niveau choisi. Pose les fondations
+Next.js + Supabase Auth.
 
 ### Critères d'acceptation
 
 - [ ] Un utilisateur peut se connecter par courriel + mot de passe et réinitialiser un mot de passe oublié.
 - [ ] Les routes de l'app sont protégées ; un non-authentifié est redirigé vers `/login`.
-- [ ] Les deux rôles existent et accèdent à l'app ; aucune restriction d'édition entre eux.
+- [ ] Une invitation courriel émise depuis le dashboard Supabase (niveau en metadata) crée une ligne `profiles` avec le bon `permission_level` via le trigger `handle_new_user`.
+- [ ] L'enum `permission_level` vaut `{lecteur, editeur}` (défaut `lecteur` si metadata absente) ; pas de niveau `admin` applicatif ni d'UI d'invitation in-app en Phase 1.
 - [ ] Le shell affiche la navigation et un dashboard vide.
 
 ## Bloquée par
@@ -202,7 +209,7 @@ fréquence régulière) pour éviter un traitement complet à chaque occurrence.
 
 ### Critères d'acceptation
 
-- [ ] L'app détecte une dépense récurrente et la signale à l'opérateur.
+- [ ] L'app détecte une dépense récurrente et la signale à l'utilisateur.
 - [ ] Le traitement d'une récurrence reconnue est allégé par rapport à une saisie complète.
 
 ## Bloquée par

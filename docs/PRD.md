@@ -6,54 +6,54 @@ MT Conseil, une firme d'ingénierie/conseil au Québec, tient sa comptabilité d
 
 ## Solution
 
-Une app de comptabilité sur mesure qui remplace graduellement Zoho Books, bâtie autour d'un grand livre en partie double où chaque événement financier devient une écriture équilibrée. L'app permet à l'opérateur de : recevoir les factures fournisseurs (saisie manuelle ou via n8n) et générer automatiquement les écritures de dépense et de paiement ; saisir les factures clients importées de Zoho et suivre les encaissements avec une balance âgée ; suivre la TPS/TVQ perçue et payée pour calculer le net à remettre ; consulter des états financiers (bilan, état des résultats) calculés en direct depuis le grand livre ; clôturer une année fiscale en verrouillant le passé ; et produire un dossier d'export pour le comptable externe. L'app démarre à zéro à la date de bascule, sans reprise de l'historique Zoho.
+Une app de comptabilité sur mesure qui remplace graduellement Zoho Books, bâtie autour d'un grand livre en partie double où chaque événement financier devient une écriture équilibrée. L'app permet à l'utilisateur de : recevoir les factures fournisseurs (saisie manuelle ou via n8n) et générer automatiquement les écritures de dépense et de paiement ; saisir les factures clients importées de Zoho et suivre les encaissements avec une balance âgée ; suivre la TPS/TVQ perçue et payée pour calculer le net à remettre ; consulter des états financiers (bilan, état des résultats) calculés en direct depuis le grand livre ; clôturer une année fiscale en verrouillant le passé ; et produire un dossier d'export pour le comptable externe. L'app démarre à zéro à la date de bascule, sans reprise de l'historique Zoho.
 
 ## Utilisateur cible
 
-Deux personnes accèdent à l'app. **L'opérateur** (le porteur du projet) réalise la tenue de livres, la révision hebdomadaire des dépenses, la saisie de l'AR et les clôtures ; il maîtrise la compta générale mais n'a pas d'expérience des logiciels comptables professionnels. Un **contact interne MT Conseil** (associé/gestionnaire) consulte l'état financier et peut intervenir directement sur les données si besoin. Les deux rôles ont la même capacité d'édition ; aucune restriction générale entre eux. Toute distinction future se limite à des actions spécifiques (ex: clôture d'année fiscale).
+L'app est utilisée par un nombre illimité de membres de l'équipe MT Conseil, invités par un admin au besoin (pas de signup public). À l'invitation, l'admin choisit le niveau de permission de la nouvelle personne : lecteur (consultation seulement) ou editeur (peut créer, modifier et corriger des données financières). Les utilisateurs sont familiers avec la compta générale, mais pas nécessairement avec un logiciel comptable professionnel.
 
 ## User Stories
 
 **Authentification & rôles**
-- **US-1** — En tant qu'utilisateur, je veux me connecter par courriel + mot de passe et réinitialiser un mot de passe oublié, afin d'accéder à l'app de façon sécurisée.
-- **US-2** — En tant qu'utilisateur (opérateur ou contact MT Conseil), je veux pouvoir consulter et modifier n'importe quelle donnée financière si besoin, afin que les deux rôles puissent intervenir sans dépendre l'un de l'autre pour une simple correction.
+- **US-1** — En tant qu'utilisateur invité, je veux me connecter par courriel + mot de passe et réinitialiser un mot de passe oublié, afin d'accéder à l'app de façon sécurisée.
+- **US-2** — En tant qu'admin, je veux inviter une nouvelle personne par courriel et lui assigner un niveau de permission (lecteur ou éditeur), afin de faire grandir l'équipe sans dépendre d'un accès direct à Supabase.
 
 **Comptes fournisseurs (AP)**
-- **US-3** — En tant qu'opérateur, je veux saisir manuellement une facture fournisseur, afin d'enregistrer une dépense sans dépendre d'une automatisation.
-- **US-4** — En tant qu'opérateur, je veux que l'app lise automatiquement les données de factures fournisseurs depuis le Google Sheet alimenté par n8n, afin d'automatiser la saisie depuis le flux OCR externe sans intervention manuelle.
-- **US-5** — En tant qu'opérateur, je veux qu'à la réception d'une facture l'app génère l'écriture (dépense au débit, TPS/TVQ payée [CTI] au débit, comptes fournisseurs à payer au crédit), afin que la dépense soit comptabilisée correctement.
-- **US-6** — En tant qu'opérateur, je veux marquer une facture « payée » et générer la deuxième écriture (fournisseurs à payer au débit, banque au crédit), afin de refléter le décaissement.
-- **US-7** — En tant qu'opérateur, je veux que chaque dépense soit catégorisée par poste comptable avec une suggestion que je peux corriger, afin d'imputer la dépense au bon compte.
-- **US-8** — En tant qu'opérateur, je veux que l'app reconnaisse les dépenses récurrentes (même fournisseur + montant similaire + fréquence régulière), afin d'éviter un traitement complet à chaque fois.
-- **US-9** — En tant qu'opérateur, je veux consulter la facture source (image/PDF) rattachée à chaque entrée, afin de vérifier la donnée contre la pièce d'origine.
+- **US-3** — En tant qu'utilisateur, je veux saisir manuellement une facture fournisseur, afin d'enregistrer une dépense sans dépendre d'une automatisation.
+- **US-4** — En tant qu'utilisateur, je veux que l'app lise automatiquement les données de factures fournisseurs depuis le Google Sheet alimenté par n8n, afin d'automatiser la saisie depuis le flux OCR externe sans intervention manuelle.
+- **US-5** — En tant qu'utilisateur, je veux qu'à la réception d'une facture l'app génère l'écriture (dépense au débit, TPS/TVQ payée [CTI] au débit, comptes fournisseurs à payer au crédit), afin que la dépense soit comptabilisée correctement.
+- **US-6** — En tant qu'utilisateur, je veux marquer une facture « payée » et générer la deuxième écriture (fournisseurs à payer au débit, banque au crédit), afin de refléter le décaissement.
+- **US-7** — En tant qu'utilisateur, je veux que chaque dépense soit catégorisée par poste comptable avec une suggestion que je peux corriger, afin d'imputer la dépense au bon compte.
+- **US-8** — En tant qu'utilisateur, je veux que l'app reconnaisse les dépenses récurrentes (même fournisseur + montant similaire + fréquence régulière), afin d'éviter un traitement complet à chaque fois.
+- **US-9** — En tant qu'utilisateur, je veux consulter la facture source (image/PDF) rattachée à chaque entrée, afin de vérifier la donnée contre la pièce d'origine.
 
 **Rituels hebdomadaires**
-- **US-10** — En tant qu'opérateur, je veux un parcours de tenue de livres pour saisir et générer les écritures, afin de tenir la compta à jour chaque semaine.
-- **US-11** — En tant qu'opérateur, je veux un parcours de révision distinct pour contrôler les entrées et les corriger dans l'app (jamais dans le Sheet), afin d'assurer la qualité avant que la période soit figée.
+- **US-10** — En tant qu'utilisateur, je veux un parcours de tenue de livres pour saisir et générer les écritures, afin de tenir la compta à jour chaque semaine.
+- **US-11** — En tant qu'utilisateur, je veux un parcours de révision distinct pour contrôler les entrées et les corriger dans l'app (jamais dans le Sheet), afin d'assurer la qualité avant que la période soit figée.
 
 **Comptes clients (AR)**
-- **US-12** — En tant qu'opérateur, je veux importer manuellement les factures clients (émises via Zoho), afin de suivre les revenus sans sync API.
-- **US-13** — En tant qu'opérateur, je veux que l'app génère l'écriture AR (clients à recevoir au débit, revenus + taxes perçues au crédit), afin de comptabiliser le revenu.
-- **US-14** — En tant qu'opérateur, je veux marquer un encaissement (banque au débit, clients à recevoir au crédit), afin de refléter la réception du paiement.
-- **US-15** — En tant qu'opérateur, je veux un rapport de balance âgée par client (0-30 / 30-60 / 60-90+ jours), afin de voir l'ancienneté des créances au-delà d'un simple statut payé/impayé.
+- **US-12** — En tant qu'utilisateur, je veux importer manuellement les factures clients (émises via Zoho), afin de suivre les revenus sans sync API.
+- **US-13** — En tant qu'utilisateur, je veux que l'app génère l'écriture AR (clients à recevoir au débit, revenus + taxes perçues au crédit), afin de comptabiliser le revenu.
+- **US-14** — En tant qu'utilisateur, je veux marquer un encaissement (banque au débit, clients à recevoir au crédit), afin de refléter la réception du paiement.
+- **US-15** — En tant qu'utilisateur, je veux un rapport de balance âgée par client (0-30 / 30-60 / 60-90+ jours), afin de voir l'ancienneté des créances au-delà d'un simple statut payé/impayé.
 
 **Taxes TPS/TVQ**
-- **US-16** — En tant qu'opérateur, je veux que chaque ligne de dépense/revenu porte un code de taxe (TPS 5 %, TVQ 9,975 %), afin de suivre séparément taxes perçues (passif) et CTI (actif).
-- **US-17** — En tant qu'opérateur, je veux un rapport du net à remettre (perçues − CTI) pour une période, afin de préparer la remise fiscale.
-- **US-18** — En tant qu'opérateur, je veux configurer les numéros d'inscription (NEQ, TPS, TVQ) dans les paramètres, afin qu'ils apparaissent sur les documents.
+- **US-16** — En tant qu'utilisateur, je veux que chaque ligne de dépense/revenu porte un code de taxe (TPS 5 %, TVQ 9,975 %), afin de suivre séparément taxes perçues (passif) et CTI (actif).
+- **US-17** — En tant qu'utilisateur, je veux un rapport du net à remettre (perçues − CTI) pour une période, afin de préparer la remise fiscale.
+- **US-18** — En tant qu'utilisateur, je veux configurer les numéros d'inscription (NEQ, TPS, TVQ) dans les paramètres, afin qu'ils apparaissent sur les documents.
 
 **États financiers & dashboard**
 - **US-19** — En tant qu'utilisateur, je veux un bilan et un état des résultats calculés automatiquement depuis le grand livre, afin de ne jamais les saisir à la main.
 - **US-20** — En tant qu'utilisateur, je veux un tableau de bord du portrait global (flux financiers, AP/AR, par poste), afin d'avoir une vue d'ensemble.
 
 **Intégrité comptable & audit**
-- **US-21** — En tant qu'opérateur, je veux qu'il soit impossible d'enregistrer une écriture déséquilibrée, afin que la partie double ne soit jamais violée.
-- **US-22** — En tant qu'opérateur, je veux corriger une période clôturée uniquement via une écriture d'ajustement dans la période courante, afin que le passé reste immuable.
+- **US-21** — En tant qu'utilisateur, je veux qu'il soit impossible d'enregistrer une écriture déséquilibrée, afin que la partie double ne soit jamais violée.
+- **US-22** — En tant qu'utilisateur, je veux corriger une période clôturée uniquement via une écriture d'ajustement dans la période courante, afin que le passé reste immuable.
 - **US-23** — En tant qu'utilisateur, je veux consulter dans l'interface l'historique des modifications (qui, quoi, quand), afin de disposer d'une piste d'audit.
 
 **Clôture & export**
-- **US-24** — En tant qu'opérateur, je veux clôturer une année fiscale pour verrouiller ses transactions en lecture seule, afin de figer la période.
-- **US-25** — En tant qu'opérateur, je veux exporter un dossier (PDF + CSV/Excel) pour le comptable externe, afin de lui remettre une comptabilité exploitable.
+- **US-24** — En tant qu'utilisateur, je veux clôturer une année fiscale pour verrouiller ses transactions en lecture seule, afin de figer la période.
+- **US-25** — En tant qu'utilisateur, je veux exporter un dossier (PDF + CSV/Excel) pour le comptable externe, afin de lui remettre une comptabilité exploitable.
 
 ## Critères de succès
 
@@ -75,15 +75,15 @@ Deux personnes accèdent à l'app. **L'opérateur** (le porteur du projet) réal
 
 - **Partie double inviolable** : impossible d'enregistrer une écriture dont débits ≠ crédits ; la contrainte est garantie au niveau des données, pas seulement dans l'interface.
 - **Passé immuable** : une fois une période clôturée, ses transactions passent en lecture seule ; toute correction se fait par écriture d'ajustement dans la période courante.
-- **Deux voies d'ingestion des dépenses** : saisie manuelle par l'opérateur, ou lecture automatisée du Google Sheet alimenté par n8n (l'app tire les données, pas de point d'intégration exposé côté app). La zone tampon Google Sheet reste côté n8n.
-- **Mécanisme de catégorisation modulaire** : le mapping dépense → poste comptable (règles, LLM, ou manuel) est conçu de façon interchangeable ; l'opérateur voit une suggestion qu'il peut corriger. Mécanisme précis à concevoir.
+- **Deux voies d'ingestion des dépenses** : saisie manuelle par l'utilisateur, ou lecture automatisée du Google Sheet alimenté par n8n (l'app tire les données, pas de point d'intégration exposé côté app). La zone tampon Google Sheet reste côté n8n.
+- **Mécanisme de catégorisation modulaire** : le mapping dépense → poste comptable (règles, LLM, ou manuel) est conçu de façon interchangeable ; l'utilisateur voit une suggestion qu'il peut corriger. Mécanisme précis à concevoir.
 - **Deux rituels hebdomadaires distincts** : tenue de livres (saisie/écritures) et révision (contrôle qualité) sont deux parcours séparés. Les corrections se font dans l'app, jamais dans le Sheet.
 - **Balance âgée** par tranches 0-30 / 30-60 / 60-90+ jours, groupée par client.
 - **Taxes** : TPS 5 % et TVQ 9,975 %, perçues (passif) et CTI (actif) suivies séparément ; code de taxe par ligne.
 - **Année fiscale configurable** dans les paramètres ; date de début exacte à confirmer avec MT Conseil.
 - **Plan comptable générique au démarrage** (5 catégories : actifs, passifs, capitaux propres, revenus, dépenses), ajustable en cours de route ; structure fine à préciser.
 - **Format d'export** : PDF + CSV/Excel ; format exact à déterminer avec le comptable externe.
-- **Deux rôles nominaux** : opérateur et contact MT Conseil, avec la même capacité d'édition — pas de séparation de permissions générale. Toute distinction future se limiterait à des actions spécifiques (ex: clôture), pas à l'accès aux données.
+- **Système d'invitation par courriel, illimité** — pas de signup public. Deux niveaux de permission choisis à l'invitation : lecteur (accès en lecture à toutes les données financières) et editeur (en plus, droits de création/modification). Le niveau est ajustable après coup par un admin.
 
 ## Notes complémentaires
 

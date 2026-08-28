@@ -20,7 +20,7 @@ En mode QA, signaler tout code qui ne respecte pas DESIGN.md.
 - Passé immuable : une période clôturée est en lecture seule ; toute correction passe par une écriture d'ajustement dans la période courante.
 - Verrou optimiste (version/horodatage) sur chaque `journal_entries` ; une modif sur version périmée est rejetée.
 - Ingestion = l'app *tire* (pull) le Google Sheet ; pas de webhook, pas d'endpoint exposé. Trigger et anti-doublon restent côté n8n.
-- Deux rôles (`operateur`, `contact_mt`) à capacité d'édition **identique** — aucune restriction d'accès entre eux ; la piste d'audit assure la traçabilité.
+- Accès par invitation courriel (pas de signup public). Deux niveaux de permission stockés dans `profiles.permission_level` : `lecteur` (lecture seule) et `editeur` (lecture + création/modification), choisis à l'invitation (metadata lue par le trigger `handle_new_user`, défaut `lecteur`). Distinction lecture/écriture portée par **RLS**. « Admin » = humain via dashboard Supabase (pas un rôle stocké) ; la piste d'audit assure la traçabilité.
 - Toute phase touchant aux écritures livre des tests Σ débits = Σ crédits (insertion, modif, suppression de ligne).
 - Repo : migrations Supabase **additives** uniquement ; projet lié = **DEV** ; jamais de travail direct sur `main` (branche + PR obligatoires).
 

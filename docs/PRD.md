@@ -20,7 +20,7 @@ Deux personnes accèdent à l'app. **L'opérateur** (le porteur du projet) réal
 
 **Comptes fournisseurs (AP)**
 - **US-3** — En tant qu'opérateur, je veux saisir manuellement une facture fournisseur, afin d'enregistrer une dépense sans dépendre d'une automatisation.
-- **US-4** — En tant qu'opérateur, je veux que l'app reçoive les données de factures fournisseurs via n8n (clé API et/ou requête HTTP), afin d'automatiser la saisie depuis le flux OCR externe.
+- **US-4** — En tant qu'opérateur, je veux que l'app lise automatiquement les données de factures fournisseurs depuis le Google Sheet alimenté par n8n, afin d'automatiser la saisie depuis le flux OCR externe sans intervention manuelle.
 - **US-5** — En tant qu'opérateur, je veux qu'à la réception d'une facture l'app génère l'écriture (dépense au débit, TPS/TVQ payée [CTI] au débit, comptes fournisseurs à payer au crédit), afin que la dépense soit comptabilisée correctement.
 - **US-6** — En tant qu'opérateur, je veux marquer une facture « payée » et générer la deuxième écriture (fournisseurs à payer au débit, banque au crédit), afin de refléter le décaissement.
 - **US-7** — En tant qu'opérateur, je veux que chaque dépense soit catégorisée par poste comptable avec une suggestion que je peux corriger, afin d'imputer la dépense au bon compte.

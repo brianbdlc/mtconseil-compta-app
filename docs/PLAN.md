@@ -86,11 +86,11 @@ Next.js + Supabase Auth.
 
 ### Critères d'acceptation
 
-- [ ] Un utilisateur peut se connecter par courriel + mot de passe et réinitialiser un mot de passe oublié.
-- [ ] Les routes de l'app sont protégées ; un non-authentifié est redirigé vers `/login`.
-- [ ] Une invitation courriel portant le niveau en metadata (Auth Admin API / `scripts/invite.ts`, le dashboard n'ayant pas de champ metadata) crée une ligne `profiles` avec le bon `permission_level` via le trigger `handle_new_user` ; une invitation sans metadata retombe sur `lecteur`.
-- [ ] L'enum `permission_level` vaut `{lecteur, editeur}` (défaut `lecteur` si metadata absente) ; pas de niveau `admin` applicatif ni d'UI d'invitation in-app en Phase 1.
-- [ ] Le shell affiche la navigation et un dashboard vide.
+- [x] Un utilisateur peut se connecter par courriel + mot de passe et réinitialiser un mot de passe oublié.
+- [x] Les routes de l'app sont protégées ; un non-authentifié est redirigé vers `/login`.
+- [x] Une invitation courriel portant le niveau en metadata (Auth Admin API / `scripts/invite.ts`, le dashboard n'ayant pas de champ metadata) crée une ligne `profiles` avec le bon `permission_level` via le trigger `handle_new_user` ; une invitation sans metadata retombe sur `lecteur`.
+- [x] L'enum `permission_level` vaut `{lecteur, editeur}` (défaut `lecteur` si metadata absente) ; pas de niveau `admin` applicatif ni d'UI d'invitation in-app en Phase 1.
+- [x] Le shell affiche la navigation et un dashboard vide.
 
 ## Bloquée par
 

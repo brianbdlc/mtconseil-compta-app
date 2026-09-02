@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+/*
+ * Design system « Precision Utilitarian » — voir docs/DESIGN.md.
+ * Light-first (outil de tenue de livres de jour). Tokens = source de vérité.
+ */
+
+@theme {
+  /* Ink / marque */
+  --color-ink: #16324f;
+  --color-ink-hover: #1f4266;
+  --color-ink-tint: #e1e8ef;
+
+  /* Surfaces papier */
+  --color-paper: #faf9f6;
+  --color-surface: #ffffff;
+
+  /* Neutres (clair → foncé) */
+  --color-neutral-100: #efede7;
+  --color-neutral-200: #e5e3dd; /* bordures */
+  --color-neutral-400: #b7b4ac;
+  --color-neutral-500: #6b7280; /* texte secondaire */
+  --color-neutral-700: #3a3f46;
+  --color-neutral-900: #1a1d21; /* texte principal */
+
+  /* Sémantique comptable */
+  --color-credit: #137547;
+  --color-credit-bg: #e7f1eb;
+  --color-debit: #b4232a;
+  --color-debit-bg: #f7e7e7;
+  --color-warning: #b7791f;
+  --color-warning-bg: #f6eddb;
+  --color-info: #2b5c8a;
+  --color-info-bg: #e4edf4;
+
+  /* Rôles de texte / fond mappés sur les surfaces */
+  --color-background: var(--color-paper);
+  --color-foreground: var(--color-neutral-900);
+
+  /* Typographie */
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  /* Rayons */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-paper: #12161c;
+    --color-surface: #1a1f26;
+    --color-neutral-200: #2a303a; /* bordures désaturées */
+    --color-neutral-500: #9aa2ad;
+    --color-neutral-900: #eceef1;
+    --color-background: var(--color-paper);
+    --color-foreground: var(--color-neutral-900);
+  }
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+}
+
+/* Rigueur comptable : tous les montants alignés. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}

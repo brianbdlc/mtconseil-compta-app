@@ -28,12 +28,17 @@ Décisions durables qui s'appliquent à toutes les phases :
 
 - **Stack** : Next.js (App Router) + Supabase — Postgres, Auth, Storage, Edge Functions, pg_cron.
 - **Auth & permissions** : Supabase Auth email/mot de passe + reset. Invitation par
-  courriel illimitée (pas de signup public), émise depuis le **dashboard Supabase** ;
-  le niveau est passé en **metadata** et lu par le trigger `handle_new_user`. Enum
-  `profiles.permission_level` = `{lecteur, editeur}` (défaut `lecteur` si metadata
-  absente) : `lecteur` (lecture seule sur toutes les données financières), `editeur`
-  (en plus, création/modification). Pas de niveau `admin` applicatif — « admin » = humain
-  via le dashboard ; un vrai rôle admin (invitation in-app) pourra être ajouté plus tard.
+  courriel illimitée (pas de signup public). Le niveau est lu par le trigger
+  `handle_new_user` depuis `raw_user_meta_data->>'permission_level'`. **Limite dashboard**:
+  le bouton « Invite user » du dashboard Supabase **n'expose pas de champ metadata** —
+  pour fixer le niveau à l'invitation, passer par l'**Auth Admin API**
+  (`inviteUserByEmail(email, { data: { permission_level } })`, clé secrète côté serveur ;
+  voir `scripts/invite.ts`) ; à défaut, inviter au dashboard (défaut `lecteur`) puis
+  ajuster le niveau en base. Enum `profiles.permission_level` = `{lecteur, editeur}`
+  (défaut `lecteur` si metadata absente) : `lecteur` (lecture seule sur toutes les données
+  financières), `editeur` (en plus, création/modification). Pas de niveau `admin`
+  applicatif — « admin » = humain via le dashboard ; un vrai rôle admin (invitation
+  in-app) pourra être ajouté plus tard.
   La distinction lecture/écriture est **portée par RLS** ; l'application des droits en
   écriture se matérialise quand les tables financières existent (Phase 2+).
 - **Cœur grand livre** :
@@ -83,7 +88,7 @@ Next.js + Supabase Auth.
 
 - [ ] Un utilisateur peut se connecter par courriel + mot de passe et réinitialiser un mot de passe oublié.
 - [ ] Les routes de l'app sont protégées ; un non-authentifié est redirigé vers `/login`.
-- [ ] Une invitation courriel émise depuis le dashboard Supabase (niveau en metadata) crée une ligne `profiles` avec le bon `permission_level` via le trigger `handle_new_user`.
+- [ ] Une invitation courriel portant le niveau en metadata (Auth Admin API / `scripts/invite.ts`, le dashboard n'ayant pas de champ metadata) crée une ligne `profiles` avec le bon `permission_level` via le trigger `handle_new_user` ; une invitation sans metadata retombe sur `lecteur`.
 - [ ] L'enum `permission_level` vaut `{lecteur, editeur}` (défaut `lecteur` si metadata absente) ; pas de niveau `admin` applicatif ni d'UI d'invitation in-app en Phase 1.
 - [ ] Le shell affiche la navigation et un dashboard vide.
 

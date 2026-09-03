@@ -112,12 +112,12 @@ optimiste contre les modifications concurrentes.
 
 ### Critères d'acceptation
 
-- [ ] Le plan comptable est seedé avec les 5 classes et consultable.
-- [ ] On peut créer une écriture manuelle ; une écriture déséquilibrée est rejetée par la BD.
-- [ ] Supprimer une ligne isolée est impossible ; seule l'annulation de l'écriture complète l'est.
-- [ ] Une modification concurrente sur une version périmée est rejetée (verrou optimiste).
-- [ ] On peut ajouter/modifier un compte après le seed initial.
-- [ ] Tests automatisés : Σ débits = Σ crédits vérifié à l'insertion, la modification, la suppression de ligne.
+- [x] Le plan comptable est seedé avec les 5 classes et consultable.
+- [x] On peut créer une écriture manuelle ; une écriture déséquilibrée est rejetée par la BD.
+- [x] Supprimer une ligne isolée est impossible ; seule l'annulation de l'écriture complète l'est.
+- [x] Une modification concurrente sur une version périmée est rejetée (verrou optimiste).
+- [x] On peut ajouter/modifier un compte après le seed initial.
+- [x] Tests automatisés : Σ débits = Σ crédits vérifié à l'insertion, la modification, la suppression de ligne.
 
 ## Bloquée par
 
